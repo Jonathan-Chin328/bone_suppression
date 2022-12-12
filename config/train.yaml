@@ -1,0 +1,14 @@
+path:
+  # dataset: './dataset/augmented/augmented'
+  dataset: './dataset/augmented/convert_augmented'
+  save_path: './output/test1'
+
+parameter:
+  train_set_ratio: 0.1
+  epoch: 200
+  img_resize: 256
+
+model:
+  num_filters: 64
+  num_res_blocks: 16
+  res_block_scaling: 0.1

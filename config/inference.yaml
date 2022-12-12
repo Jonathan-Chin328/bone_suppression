@@ -1,0 +1,9 @@
+path:
+  dataset: './dataset/inference'
+  load_path: './output/test'
+  save_path: './inference'
+
+model:
+  num_filters: 64
+  num_res_blocks: 16
+  res_block_scaling: 0.1

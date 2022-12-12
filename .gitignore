@@ -1,0 +1,6 @@
+/__pycache__
+/cxr_metric
+/dataset
+/inference
+/output
+.DS_Store
