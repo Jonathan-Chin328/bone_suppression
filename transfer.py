@@ -23,7 +23,7 @@ def convert(img_list):
         equ[equ[:,:] == 255] = 0
         cv2.imwrite(fname, equ)
 
-print('start transfer source....')
+print('start transfer source...')
 convert(src)
-print('start transfer target....')
+print('start transfer target...')
 convert(tgt)

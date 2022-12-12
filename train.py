@@ -75,7 +75,7 @@ def eval(args, data_loader, model):
     return eval_loss, outputs, fnames
 
 
-def train(args, config, tools, train_loader, val_loader, model):
+def train(args, config, tools, train_loader, val_loader, model, start_iteration):
     logger = tools.get_logger()
     logger.info(args)
     # optimizer
@@ -90,7 +90,7 @@ def train(args, config, tools, train_loader, val_loader, model):
 
     device = model.device
     best_results = {'mae_loss': 100, 'ms_ssim_loss': 100, 'combined_loss': 100}
-    iteration = 0
+    iteration = start_iteration
 
 
     model.train()
@@ -145,9 +145,13 @@ def main():
     train_loader, val_loader = bs_dataloader.get_dataloader()
     # get model
     model_class = Model(args, config, device)
-    model = model_class.get_model()
+    if not config['path']['load_path']:
+        model = model_class.get_model()
+        start_iteration = 0
+    else:
+        model, start_iteration = model_class.get_save_model(os.path.join(config['path']['load_path'], 'best.pth'))
     # start train
-    train(args, config, tools, train_loader, val_loader, model)
+    train(args, config, tools, train_loader, val_loader, model, start_iteration)
 
 
 if __name__ == '__main__':

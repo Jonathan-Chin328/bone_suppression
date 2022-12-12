@@ -32,7 +32,7 @@ class Model():
         print('\tSSIM loss:', ckpt['eval_loss']['ms_ssim_loss'])
         model = self.get_model()
         model.load_state_dict(ckpt['model_state_dict'])
-        return model
+        return model, ckpt['iteration']
 
 
 class ResNet_BS(nn.Module):

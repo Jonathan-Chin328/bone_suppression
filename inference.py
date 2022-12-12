@@ -52,7 +52,7 @@ def main():
     dataloader = bs_dataloader.get_inference_dataloader(src=args.inference_src)
     # get model
     model_class = Model(args, config, device)
-    model = model_class.get_save_model(os.path.join(config['path']['load_path'], 'best.pth'))
+    model, _ = model_class.get_save_model(os.path.join(config['path']['load_path'], 'best.pth'))
     # start train
     inference(args, tools, dataloader, model)
 
