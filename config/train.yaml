@@ -1,8 +1,9 @@
 path:
   # dataset: './dataset/augmented/augmented'
   dataset: './dataset/augmented/convert_augmented'
-  save_path: './output/resize'
-  load_path: './output/resize'
+  save_path: './output/pca'
+  # load_path: './output/resize'
+  load_path: 
 
 parameter:
   train_set_ratio: 0.1

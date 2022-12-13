@@ -19,7 +19,7 @@ from metric import MSSSIM
 def parse():
     parser = ArgumentParser()
     parser.add_argument('--config', default='./config/train.yaml', type=str, help='path of config file')
-    parser.add_argument('--model', default='Resnet_BS', help=['model architecture for bone suppression'])
+    parser.add_argument('--model', default='Decoder', help=['model architecture for bone suppression'])
     parser.add_argument('--batch_size', default=8, help='batch size')
     parser.add_argument('--optimizer', default='Adam', help='optimizer for training')
     parser.add_argument('--scheduler', default='ReduceLROnPlateau', help='scheduler for training')
@@ -110,7 +110,7 @@ def train(args, config, tools, train_loader, val_loader, model, start_iteration)
             tools.plot(batch_loss, iteration, 'Train', lr=lr)
 
             # evaluation
-            if  iteration==1 or iteration % args.val_freq == 0:
+            if  iteration==start_iteration + 1 or iteration % args.val_freq == 0:
                 eval_loss, outputs, fnames = eval(args, val_loader, model)
                 tools.plot(eval_loss, iteration, 'Val')
                 if eval_loss['combined_loss'] < best_results['combined_loss']:
