@@ -27,14 +27,13 @@ class JSRT_Dataset(Dataset):
         src = self.source[idx]
         fname = src.split('/')[-1]
         if self.pca_source:
-            src_img = torch.tensor(self.pca_source[idx], dtype=torch.float32)
-        else:
-            src_img = cv2.imread(src, cv2.IMREAD_GRAYSCALE)
-            if 'equalhist' in self.data_aug_list:
-                src_img = cv2.equalizeHist(src_img)
-            src_img = src_img / 255
-            src_img = Image.fromarray(src_img)
-            src_img = self.transform(src_img)
+            pca = torch.tensor(self.pca_source[idx], dtype=torch.float32)
+        src_img = cv2.imread(src, cv2.IMREAD_GRAYSCALE)
+        if 'equalhist' in self.data_aug_list:
+            src_img = cv2.equalizeHist(src_img)
+        src_img = src_img / 255
+        src_img = Image.fromarray(src_img)
+        src_img = self.transform(src_img)
         # target data
         if self.target is not None:
             tgt = self.target[idx]
@@ -46,9 +45,9 @@ class JSRT_Dataset(Dataset):
             # 1024
             # toTensor = transforms.ToTensor()
             # tgt_img = toTensor(tgt_img)
-            return src_img, tgt_img, fname
+            return src_img, tgt_img, pca, fname
         else:
-            return src_img, fname
+            return src_img, pca, fname
 
 
     def __len__(self):
@@ -70,7 +69,7 @@ class BS_Dataloader(DataLoader):
     def get_dataloader(self):
         src = sorted(glob.glob(os.path.join(self.config['path']['dataset'], 'source/*')))
         tgt = sorted(glob.glob(os.path.join(self.config['path']['dataset'], 'target/*')))
-        if self.args.model == 'Decoder':
+        if self.args.model == 'Decoder' or self.args.model == 'Resnet_BS':
             src_pca = self.get_pca_data()
             train_src_pca = []
             val_src_pca   = []
@@ -83,17 +82,17 @@ class BS_Dataloader(DataLoader):
         val_tgt   = []
         for i in range(len(src)):
             if i in samp:
-                if self.args.model == 'Decoder':
+                if self.args.model == 'Decoder' or self.args.model == 'Resnet_BS':
                     train_src_pca.append(src_pca[i])
                 train_src.append(src[i])
                 train_tgt.append(tgt[i])
             else:
-                if self.args.model == 'Decoder':
+                if self.args.model == 'Decoder' or self.args.model == 'Resnet_BS':
                     val_src_pca.append(src_pca[i])
                 val_src.append(src[i])
                 val_tgt.append(tgt[i])
         # get dataset
-        if self.args.model == 'Decoder':
+        if self.args.model == 'Decoder' or self.args.model == 'Resnet_BS':
             src_pca = self.get_pca_data()
             train_set = JSRT_Dataset(train_src, train_tgt, resize=self.config['parameter']['img_resize'], pca_source=train_src_pca)
             val_set   = JSRT_Dataset(val_src, val_tgt, resize=self.config['parameter']['img_resize'], pca_source=val_src_pca)

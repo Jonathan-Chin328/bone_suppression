@@ -26,7 +26,7 @@ def inference(args, tools, dataloader, model):
     device = model.device
     with torch.no_grad():
         for batch in tqdm(dataloader, desc='[inference]'):
-            src, fnames = batch
+            src, pca, fnames = batch
             src = src.to(device)
             outputs = model(src)
             if args.inference_src is None:

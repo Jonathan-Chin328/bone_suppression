@@ -19,7 +19,7 @@ from metric import MSSSIM
 def parse():
     parser = ArgumentParser()
     parser.add_argument('--config', default='./config/train.yaml', type=str, help='path of config file')
-    parser.add_argument('--model', default='Decoder', help=['model architecture for bone suppression'])
+    parser.add_argument('--model', default='Resnet_BS', help=['model architecture for bone suppression'])
     parser.add_argument('--batch_size', default=8, help='batch size')
     parser.add_argument('--optimizer', default='Adam', help='optimizer for training')
     parser.add_argument('--scheduler', default='ReduceLROnPlateau', help='scheduler for training')
@@ -97,10 +97,10 @@ def train(args, config, tools, train_loader, val_loader, model, start_iteration)
     for epoch in range(config['parameter']['epoch']):
         for batch in tqdm(train_loader, desc='[train] epoch-{}'.format(epoch)):
             iteration += 1
-            src, tgt, fnames = batch
-            src, tgt = src.to(device), tgt.to(device)
+            src, tgt, pca, fnames = batch
+            src, tgt, pca = src.to(device), tgt.to(device), pca.to(device)
             optimizer.zero_grad() 
-            outputs = model(src)
+            outputs = model(src, pca)
             batch_loss = computing_loss(outputs, tgt)
             batch_loss['combined_loss'].backward() 
             optimizer.step()

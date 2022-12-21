@@ -50,17 +50,22 @@ class ResNet_BS(nn.Module):
         # 1024
         # self.upsample = nn.ConvTranspose2d(num_filters, num_filters, kernel_size=(3,3), stride=2, padding=1)
         # self.conv_final = nn.ConvTranspose2d(num_filters, 1, kernel_size=(3,3), stride=2, padding=1)
+        self.decoder = Decoder(in_dim=256)
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x_in):
+    def forward(self, x_in, pca):
         x_in = self.conv_in(x_in)
         x = x_in.clone()
         for i in range(len(self.resnet_blocks)):
             x = self.resnet_blocks[i](x)
         x = self.conv_out(x)
         output = x + x_in
+        print(output.shape)
         # 256
         output = self.conv_final(output)
+        print(output.shape)
+        output += self.decoder(pca)
+        assert 1 == 2
         # 1024
         # output = self.upsample(output, output_size=(512, 512))
         # output = self.conv_final(output, output_size=(1024, 1024))
@@ -129,7 +134,7 @@ def weights_init(m):
 class Decoder(nn.Module):
     """
     Input shape: (N, in_dim)
-    Output shape: (N, 3, 256, 256)
+    Output shape: (N, 1, 256, 256)
     """
     def __init__(self, in_dim, dim=256):
         super(Decoder, self).__init__()
@@ -158,4 +163,5 @@ class Decoder(nn.Module):
         y = self.l1(x)
         y = y.view(y.size(0), -1, 16, 16)
         y = self.l2_5(y)
+        print(y.shape)
         return y
