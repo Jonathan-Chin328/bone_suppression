@@ -160,5 +160,4 @@ class Decoder(nn.Module):
         y = self.l1(x)
         y = y.view(y.size(0), -1, 16, 16)
         y = self.l2_5(y)
-        print(y.shape)
         return y

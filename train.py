@@ -24,7 +24,7 @@ def parse():
     parser.add_argument('--optimizer', default='Adam', help='optimizer for training')
     parser.add_argument('--scheduler', default='ReduceLROnPlateau', help='scheduler for training')
     parser.add_argument('--lr', default=0.001, help='learning rate')
-    parser.add_argument('--val_freq', default=10000, help='num of iteration per evaluation')
+    parser.add_argument('--val_freq', default=2000, help='num of iteration per evaluation')
     parser.add_argument('--debug', action='store_true', help='use smaller dataset and try to overfit')
     args = parser.parse_args()
     return args
