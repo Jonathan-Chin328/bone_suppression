@@ -27,8 +27,8 @@ def inference(args, tools, dataloader, model):
     with torch.no_grad():
         for batch in tqdm(dataloader, desc='[inference]'):
             src, pca, fnames = batch
-            src = src.to(device)
-            outputs = model(src)
+            src, pca= src.to(device), pca.to(device)
+            outputs = model(src, pca)
             if args.inference_src is None:
                 tools.inference_img(outputs, fnames)
             else:

@@ -60,9 +60,9 @@ def eval(args, data_loader, model):
     num_of_images = 0
     with torch.no_grad():
         for batch in tqdm(data_loader, desc='[Val]'):
-            src, tgt, fnames = batch
-            src, tgt = src.to(device), tgt.to(device)
-            outputs = model(src)
+            src, tgt, pca, fnames = batch
+            src, tgt, pca = src.to(device), tgt.to(device), pca.to(device)
+            outputs = model(src, pca)
             batch_loss = computing_loss(outputs, tgt)
             mae_loss += batch_loss['mae_loss'] * len(fnames)
             ms_ssim_loss += batch_loss['ms_ssim_loss'] * len(fnames)
