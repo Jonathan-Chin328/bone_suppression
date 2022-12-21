@@ -60,10 +60,8 @@ class ResNet_BS(nn.Module):
             x = self.resnet_blocks[i](x)
         x = self.conv_out(x)
         output = x + x_in + self.decoder(pca)
-        print(output.shape)
         # 256
         output = self.conv_final(output)
-        print(output.shape)
         # assert 1 == 2
         # 1024
         # output = self.upsample(output, output_size=(512, 512))
