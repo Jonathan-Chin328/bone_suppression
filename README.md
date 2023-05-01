@@ -3,6 +3,7 @@ Input cxr images and output the images without bone.
 - Reference: [Chest X‐Ray Bone Suppression for Improving Classification of
 Tuberculosis‐Consistent Findings](https://arxiv.org/abs/2104.04518)
 - Implement ResNet-BS model and PCA decoder
+- Experiment overview and results: [**project.pdf**](project.pdf)
 
 ## 1. Overview
 
